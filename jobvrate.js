@@ -6,63 +6,79 @@ const rateData = `[
   },
   {
     "Job": "Nanny",
-    "Rate": "19"
+    "Rate": "16"
   },
   {
     "Job": "Uber Driver",
-    "Rate": "29"
+    "Rate": "25"
   },
   {
     "Job": "Lyft Driver",
-    "Rate": "18"
+    "Rate": "25"
   },
   {
     "Job": "Photographer",
-    "Rate": "21"
+    "Rate": "28"
+  },
+  {
+    "Job": "Video Creator",
+    "Rate": "29"
+  },
+  {
+    "Job": "Production Assistant",
+    "Rate": "22"
+  },
+  {
+    "Job": "Graphic Designer",
+    "Rate": "27"
+  },
+  {
+    "Job": "Animator",
+    "Rate": "31"
+  },
+  {
+    "Job": "Web Designer",
+    "Rate": "27"
+  },
+  {
+    "Job": "Illustrator",
+    "Rate": "29"
+  },
+  {
+    "Job": "Social Media Manager",
+    "Rate": "26"
+  },
+  {
+    "Job": "Content Writer",
+    "Rate": "25"
   },
   {
     "Job": "Personal Trainer",
     "Rate": "24"
   },
   {
-    "Job": "Graphic Designer",
-    "Rate": "24"
+    "Job": "Consultant",
+    "Rate": "33"
   },
   {
     "Job": "Legal Consultant",
-    "Rate": "29"
+    "Rate": "37"
   },
   {
     "Job": "Tax Lawyer",
-    "Rate": "30"
+    "Rate": "43"
   },
   {
-    "Job": "Web Designer",
-    "Rate": "23"
-  },
-  {
-    "Job": "Illustrator",
-    "Rate": "23"
-  },
-  {
-    "Job": "Video Creator",
-    "Rate": "25"
-  },
-  {
-    "Job": "Social Media Manager",
-    "Rate": "16"
-  },
-  {
-    "Job": "Content Writer",
-    "Rate": "18"
+    "Job": "Financial Consultant",
+    "Rate": "32"
   },
   {
     "Job": "Software Developer",
-    "Rate": "23"
+    "Rate": "34"
   },
   {
     "Job": "Hardware Engineer",
-    "Rate": "25"
+    "Rate": "39"
   }
 
 ]`;

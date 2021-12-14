@@ -2,8 +2,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JheWt3aXNlIiwiYSI6ImNrd3YyeHZpbTAxeGgydnNlN
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/graykwise/ckwv55t8s4zhc14pogssef324',
-  center: [-73.995242, 40.750610],
-  zoom: 9
+  center: [-73.995242, 40.720610],
+  zoom: 9.5
 });
 //https://www.zumper.com/rent-research/
 var nycRentData = JSON.parse(rentData);
@@ -25,21 +25,30 @@ map.on('load', () => {
       'source': 'neighborhoods', // reference the data source
       'layout': {},
       'paint': {
-        'fill-color': '#333',
-        'fill-opacity': 0.5,
+        'fill-color': '#666',
+        'fill-outline-color': '#282422',
+        'fill-opacity': 0.8,
       },
       'filter': ['==', 'neighborhood', nycRentData[counter].Neighborhood]
     });
   }
 
-});
+  map.addControl(new mapboxgl.NavigationControl());
 
+
+});
 
 var under40Counter = 0;
 var to60Counter = 0;
 var over60Counter = 0;
 
-function setToActive(neighborhoodName, hoursToWork) {
+const popup = new mapboxgl.Popup({
+  closeButton: true,
+  closeOnClick: false
+});
+
+function setToActive(neighborhoodName, hoursToWork, displayRent) {
+
   if (0 < hoursToWork && hoursToWork < 40) {
     map.setPaintProperty(neighborhoodName, 'fill-color', 'rgba(33, 130, 88, 1)');
     under40Counter++;
@@ -54,10 +63,18 @@ function setToActive(neighborhoodName, hoursToWork) {
     over60Counter++;
   }
 
+    map.on('click', neighborhoodName, (e) => {
+      popup
+      .setLngLat(e.lngLat)
+      .setHTML('<strong>' + e.features[0].properties.neighborhood + '</strong>' +
+      '<br><br>1BR Rent: $' + displayRent + '<br> <br>Hours/Week to Afford: ' + hoursToWork.toFixed())
+      .addTo(map);
+      });
+
 };
 
 function setToUnactive(neighborhoodName) {
-  map.setPaintProperty(neighborhoodName, 'fill-color', '#333333');
+  map.setPaintProperty(neighborhoodName, 'fill-color', '#666');
 };
 
 
@@ -90,6 +107,7 @@ document.getElementById('freelanceJobPicker').onchange = function() {
 var radios = document.querySelectorAll('input[type=radio][name="roommateCheck"]');
 
 function changeHandler(event) {
+
    if ( this.value === 'one' ) {
      var chosenJob = document.getElementById('freelanceJobPicker').value;
      updateSpendingMoney(chosenJob);
@@ -103,10 +121,12 @@ function changeHandler(event) {
 
 Array.prototype.forEach.call(radios, function(radio) {
    radio.addEventListener('change', changeHandler);
+
 });
 
 
 function updateSpendingMoney(chosenJob) {
+  popup.remove();
   under40Counter = 0;
   to60Counter = 0;
   over60Counter = 0;
@@ -135,16 +155,22 @@ function updatePercentageText(chosenJob) {
   // console.log(redPer);
 
   if (chosenJob != 'default'){
+
+    document.getElementById('defaultText').innerHTML = '';
+
     document.getElementById('greenText').innerHTML = 'You can afford a 1 bedroom apartment in ' +
-    greenPer + '% of NYC neighborhoods while working 40 hours or less each week.';
+    '<strong id=greenPercentageText>' + greenPer + '%</strong>' + ' of NYC neighborhoods while working <strong>40 hours or less each week.</strong>';
 
     document.getElementById('yellowText').innerHTML = 'You can afford a 1 bedroom apartment in ' +
-    yellowPer + '% of NYC neighborhoods while working 40 to 60 hours each week.';
+    '<strong id=yellowPercentageText>' + yellowPer + '%</strong>' + ' of NYC neighborhoods while working <strong>40 to 60 hours each week.</strong>';
 
-    document.getElementById('redText').innerHTML = 'You would need to work more than 60 hours each week to afford a 1 bedroom apartment in ' +
-    redPer + '% of NYC neighborhoods.';
+    document.getElementById('redText').innerHTML = 'You would need to work <strong>more than 60 hours each week</strong> to afford a 1 bedroom apartment in ' +
+    '<strong id=redPercentageText>' + redPer + '%</strong>' + ' of NYC neighborhoods.';
   }
   else {
+
+    document.getElementById('defaultText').innerHTML = 'Select a freelance job to begin.';
+
     document.getElementById('greenText').innerHTML = '';
 
     document.getElementById('yellowText').innerHTML = '';
@@ -177,7 +203,7 @@ function findNeighborhoodScale(chosenJob, givenPayRate) {
     var hoursToWork = rentBarrier / payTimesWeeks;
 
 
-    setToActive(nycRentData[counter].Neighborhood, hoursToWork)
+    setToActive(nycRentData[counter].Neighborhood, hoursToWork, rentString)
     //console.log(maxHoursNeeded);
   }
   }
